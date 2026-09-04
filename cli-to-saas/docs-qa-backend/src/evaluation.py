@@ -81,4 +81,4 @@ Answer:
 
     except Exception as e:
         logger.error("Evaluation failed: %s", e)
-        return {"faithfulness": 0, "relevance": 0, "reasoning": "Evaluation failed"}
+        return {"faithfulness": -1, "relevance": -1, "reasoning": "Evaluation skipped — rate limit or model unavailable"}
