@@ -18,6 +18,7 @@ from src.safety import sanitize_input
 from src.observability import log_rag_query, flush
 from src.evaluation import evaluate_answer
 from src.config import settings
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialise Sentry — must happen before anything else
 if settings.sentry_dsn:
@@ -31,6 +32,7 @@ logging.basicConfig(level=settings.log_level)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Evaluated Support Bot", version="2.0.0")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 
 @app.on_event("startup")
