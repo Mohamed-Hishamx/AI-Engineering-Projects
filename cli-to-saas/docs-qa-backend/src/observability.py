@@ -14,26 +14,14 @@ langfuse = Langfuse(
 
 
 def log_rag_query(question: str, context: str, answer: str, user_id: str, model: str) -> str:
-    """
-    Log a full RAG query as a generation in Langfuse.
-    Returns the trace_id so scores can be attached later.
-    """
     trace_id = langfuse.create_trace_id()
-
-    trace_context = TraceContext(
+    langfuse.create_event(
         trace_id=trace_id,
-        user_id=user_id,
-    )
-
-    gen = langfuse.start_generation(
-        trace_context=trace_context,
         name="rag_answer",
         input=f"Question: {question}\n\nContext: {context}",
         output=answer,
-        model=model,
+        metadata={"model": model, "user_id": user_id},
     )
-    gen.end()
-
     return trace_id
 
 
