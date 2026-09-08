@@ -4,7 +4,6 @@ Built for Langfuse v3 API.
 """
 
 from langfuse import Langfuse
-from langfuse.types import TraceContext
 from src.config import settings
 
 langfuse = Langfuse(
@@ -13,14 +12,13 @@ langfuse = Langfuse(
 )
 
 
-def log_rag_query(question: str, context: str, answer: str, user_id: str, model: str) -> str:
+def log_rag_query(question: str, context: str, answer: str, user_id: str = "anonymous", model: str = None) -> str:
     trace_id = langfuse.create_trace_id()
     langfuse.create_event(
-        trace_id=trace_id,
-        name="rag_answer",
-        input=f"Question: {question}\n\nContext: {context}",
+        name="rag-query",
+        input={"question": question, "context": context},
         output=answer,
-        metadata={"model": model, "user_id": user_id},
+        metadata={"user_id": user_id, "model": model, "trace_id": trace_id},
     )
     return trace_id
 

@@ -39,10 +39,11 @@ def retrieve_relevant_chunks(db: Session, question: str, top_k: int = None) -> l
 
 
 def build_context(chunks: list[Chunk]) -> str:
-    """Format retrieved chunks into a single context block for the prompt."""
     parts = []
     for i, chunk in enumerate(chunks, 1):
-        parts.append(f"[Source {i}]\n{chunk.content}")
+        # Truncate each chunk to 300 chars to stay within token limits
+        content = chunk.content[:300]
+        parts.append(f"[Source {i}]\n{content}")
     return "\n\n".join(parts)
 
 
