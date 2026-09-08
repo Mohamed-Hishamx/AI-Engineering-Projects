@@ -14,11 +14,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
       - name: Deploy to Railway
-        working-directory: cli-to-saas/docs-qa-backend
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service docs-qa-backend
+        uses: railwayapp/railway-github-action@v1
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: docs-qa-backend
