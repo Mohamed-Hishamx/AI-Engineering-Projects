@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Hisham — AI Automation Engineer</title>
+<meta name="description" content="AI automation engineer based in Cairo. I build WhatsApp, Instagram, and voice AI systems that qualify leads, answer customers, and close the loop, for Egyptian and MENA businesses.">
+
+<!-- Open Graph / social share -->
+<meta property="og:title" content="Mohamed Hisham — AI Automation Engineer">
+<meta property="og:description" content="I build AI systems that talk to customers on WhatsApp, Instagram, and voice, and close the loop into your CRM.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0F1620;
+    --ink-2: #16202D;
+    --parchment: #EDEAE1;
+    --parchment-dim: #A9AFB8;
+    --amber: #E8A33D;
+    --teal: #3E7C7C;
+    --line: #2A3543;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+    font-size: 17px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* Trace line motif */
+  .spine {
+    position: relative;
+  }
+  .spine::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  @media (min-width: 640px) {
+    .spine::before { left: -24px; }
+  }
+
+  .node {
+    position: relative;
+    padding-left: 0;
+  }
+  .node::before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .node::before { display: block; left: -28px; }
+  }
+
+  header.hero {
+    padding: 120px 0 90px;
+  }
+
+  .kicker {
+    color: var(--teal);
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 58px);
+    max-width: 14ch;
+    margin-bottom: 28px;
+  }
+
+  .hero p {
+    max-width: 52ch;
+    color: var(--parchment-dim);
+    font-size: 19px;
+  }
+
+  .hero .location {
+    margin-top: 34px;
+    font-size: 15px;
+    color: var(--parchment-dim);
+  }
+
+  section {
+    padding: 64px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-label {
+    font-size: 14px;
+    color: var(--teal);
+    margin-bottom: 24px;
+  }
+
+  .about p {
+    max-width: 62ch;
+    margin-bottom: 18px;
+    color: var(--parchment-dim);
+  }
+  .about p:last-child { margin-bottom: 0; }
+  .about strong { color: var(--parchment); font-weight: 500; }
+
+  .case {
+    padding: 36px 0;
+    border-top: 1px solid var(--line);
+  }
+  .case:first-of-type { border-top: none; padding-top: 0; }
+
+  .case h3 {
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+
+  .case .tags {
+    font-size: 14px;
+    color: var(--teal);
+    margin-bottom: 18px;
+  }
+
+  .beat {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .beat .b-label {
+    color: var(--parchment-dim);
+    font-size: 14px;
+    padding-top: 2px;
+  }
+  .beat .b-text { color: var(--parchment); }
+
+  .case .link {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 15px;
+  }
+
+  .stack-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .stack-grid span {
+    border: 1px solid var(--line);
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-size: 14px;
+    color: var(--parchment-dim);
+  }
+
+  footer {
+    padding: 70px 0 90px;
+    border-top: 1px solid var(--line);
+  }
+
+  footer h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    max-width: 16ch;
+  }
+
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 17px;
+  }
+
+  .badge-slot {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--parchment-dim);
+  }
+
+  @media (max-width: 640px) {
+    .beat { grid-template-columns: 1fr; gap: 4px; }
+    .beat .b-label { font-size: 13px; text-transform: none; }
+    header.hero { padding: 80px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap spine">
+
+  <header class="hero node">
+    <p class="kicker">AI Automation Engineer · Cairo, Egypt</p>
+    <h1>I build the systems that answer your customers before you do.</h1>
+    <p>WhatsApp, Instagram, and voice AI that qualify leads, resolve support questions, and write straight into your CRM, so the follow-up happens whether or not someone's watching the inbox.</p>
+    <p class="location">Available for freelance and full-time work, remote or Cairo-based.</p>
+  </header>
+
+  <section class="about node">
+    <p class="section-label">About</p>
+    <div class="about">
+      <p>I started in <strong>mechatronics and IoT engineering</strong> (First-Class Honours, University of Hertfordshire), then moved into AI automation once it became clear the same systems-thinking applied: sense an input, decide, act, close the loop. The inputs changed from sensors to messages.</p>
+      <p>I hold IBM's <strong>AI Engineering</strong> and <strong>Data Analyst</strong> Professional Certificates, and I run <strong>Apex Cycle</strong>, a freelance practice building WhatsApp and Instagram automation for Egyptian and MENA brands.</p>
+    </div>
+  </section>
+
+  <section class="work node">
+    <p class="section-label">Selected work</p>
+
+    <div class="case">
+      <h3>Autonomous Revenue Engine</h3>
+      <p class="tags">Vapi · GPT-4o · HubSpot · Salesforce · Supabase</p>
+      <div class="beat">
+        <div class="b-label">Problem</div>
+        <div class="b-text">Inbound leads went cold between the first contact and a human actually calling them back.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What I did</div>
+        <div class="b-text">Built a voice AI pipeline that calls, qualifies, and scores leads on contact, then writes the outcome straight into HubSpot and Salesforce.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What came of it</div>
+        <div class="b-text">A working reference build, published with a full technical write-up.</div>
+      </div>
+    </div>
+
+    <div class="case">
+      <h3>WhatsApp Order &amp; Support Concierge</h3>
+      <p class="tags">WAHA · Docker · Supabase pgvector</p>
+      <div class="beat">
+        <div class="b-label">Problem</div>
+        <div class="b-text">Small businesses handling orders and support manually over WhatsApp, no memory of past conversations.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What I did</div>
+        <div class="b-text">Built a self-hosted WhatsApp automation layer with a vector-backed knowledge base, so it answers from the business's actual catalog and policies.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What came of it</div>
+        <div class="b-text">A reusable concierge system, containerized and ready to deploy per client.</div>
+      </div>
+    </div>
+
+    <div class="case">
+      <h3>Apex Cycle Bilingual Chatbot</h3>
+      <p class="tags">n8n · Instagram &amp; Messenger · Arabic / English</p>
+      <div class="beat">
+        <div class="b-label">Problem</div>
+        <div class="b-text">MENA brands lose customers who message in Arabic and never get a reply outside business hours.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What I did</div>
+        <div class="b-text">Built a bilingual Instagram and Messenger customer service bot, live on a demo account, handling real conversations end to end.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What came of it</div>
+        <div class="b-text">The core product offering behind Apex Cycle's client outreach.</div>
+      </div>
+    </div>
+
+    <div class="case">
+      <h3>Docs Q&amp;A Backend</h3>
+      <p class="tags">FastAPI · sentence-transformers · pgvector · Groq</p>
+      <div class="beat">
+        <div class="b-label">Problem</div>
+        <div class="b-text">Needed a lightweight, self-hostable RAG backend, not locked to a single vendor's API.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What I did</div>
+        <div class="b-text">Built a document Q&amp;A API from scratch: embedding, retrieval, and generation, running on Groq for speed.</div>
+      </div>
+      <div class="beat">
+        <div class="b-label">What came of it</div>
+        <div class="b-text">Project 2 of an ongoing AI engineering portfolio series.</div>
+      </div>
+      <a class="link" href="https://github.com/Mohamed-Hishamx/AI-Engineering-Projects" target="_blank" rel="noopener">See the code →</a>
+    </div>
+
+  </section>
+
+  <section class="stack node">
+    <p class="section-label">Stack</p>
+    <div class="stack-grid">
+      <span>n8n</span>
+      <span>Python</span>
+      <span>LangChain</span>
+      <span>Supabase / pgvector</span>
+      <span>OpenRouter</span>
+      <span>Groq</span>
+      <span>OpenAI</span>
+      <span>Vapi</span>
+      <span>HubSpot</span>
+      <span>Salesforce</span>
+      <span>Docker</span>
+    </div>
+  </section>
+
+  <footer class="node">
+    <h2>Have a system that should run itself?</h2>
+    <div class="contact-list">
+      <a href="mailto:mohamedhisham855@gmail.com">mohamedhisham855@gmail.com</a>
+      <a href="https://github.com/Mohamed-Hishamx" target="_blank" rel="noopener">github.com/Mohamed-Hishamx</a>
+    </div>
+    <div class="badge-slot">
+      <!-- FlyRank graduate badge goes here once earned -->
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
