@@ -6,7 +6,7 @@ import { useAuth } from "@clerk/nextjs";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function Dashboard() {
-  const { userId } = useAuth();
+  const { getToken } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<string | null>(null);
@@ -25,11 +25,17 @@ export default function Dashboard() {
     formData.append("file", file);
 
     try {
+      const token = await getToken();
       const res = await fetch(`${API_URL}/upload`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
       const data = await res.json();
+      if (!res.ok) {
+        setUploadResult(`❌ Upload failed: ${data.detail || res.status}`);
+        return;
+      }
       setUploadResult(`✅ Uploaded "${data.filename}" — ${data.chunks_stored} chunks stored.`);
     } catch (e) {
       setUploadResult("❌ Upload failed. Is the backend running?");
@@ -46,12 +52,20 @@ export default function Dashboard() {
     setEvaluation(null);
 
     try {
+      const token = await getToken();
       const res = await fetch(`${API_URL}/ask`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, user_id: userId || "anonymous" }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ question }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        setAnswer(`❌ Request failed: ${data.detail || res.status}`);
+        return;
+      }
       setAnswer(data.answer);
       setSources(data.sources || []);
       setEvaluation(data.evaluation);
