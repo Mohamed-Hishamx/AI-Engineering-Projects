@@ -20,6 +20,7 @@ class Document(Base):
     __tablename__ = "documents"
 
     id = Column(Integer, primary_key=True)
+    user_id = Column(String, nullable=False, index=True)
     filename = Column(String, nullable=False)
     file_type = Column(String, nullable=False)
     uploaded_at = Column(DateTime, server_default=func.now())
@@ -32,6 +33,7 @@ class Chunk(Base):
 
     id = Column(Integer, primary_key=True)
     document_id = Column(Integer, ForeignKey("documents.id"), nullable=False)
+    user_id = Column(String, nullable=False, index=True)
     content = Column(Text, nullable=False)
     chunk_index = Column(Integer, nullable=False)
     embedding = Column(Vector(settings.embedding_dimensions), nullable=False)

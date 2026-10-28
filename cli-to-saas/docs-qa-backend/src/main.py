@@ -18,6 +18,7 @@ from src.safety import sanitize_input
 from src.observability import log_rag_query, flush
 from src.evaluation import evaluate_answer
 from src.config import settings
+from src.auth import get_current_user_id
 from fastapi.middleware.cors import CORSMiddleware
 
 # Initialise Sentry — must happen before anything else
@@ -32,7 +33,14 @@ logging.basicConfig(level=settings.log_level)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Evaluated Support Bot", version="2.0.0")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+ALLOWED_ORIGINS = [o.strip() for o in settings.allowed_origins.split(",") if o.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
 
 @app.on_event("startup")
@@ -48,7 +56,6 @@ def on_shutdown():
 
 class AskRequest(BaseModel):
     question: str
-    user_id: str = "anonymous"
 
 
 class AskResponse(BaseModel):
@@ -69,7 +76,11 @@ def health():
 
 
 @app.post("/upload", response_model=UploadResponse)
-async def upload_document(file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_document(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id),
+):
     """Upload a PDF or Markdown file."""
     file_bytes = await file.read()
 
@@ -86,7 +97,7 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
         raise HTTPException(status_code=400, detail="Document produced no usable chunks.")
 
     file_type = "pdf" if file.filename.lower().endswith(".pdf") else "markdown"
-    document = Document(filename=file.filename, file_type=file_type)
+    document = Document(user_id=user_id, filename=file.filename, file_type=file_type)
     db.add(document)
     db.flush()
 
@@ -94,6 +105,7 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
     for i, (chunk_content, vector) in enumerate(zip(chunks, vectors)):
         db.add(Chunk(
             document_id=document.id,
+            user_id=user_id,
             content=chunk_content,
             chunk_index=i,
             embedding=vector,
@@ -110,7 +122,11 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
 
 
 @app.post("/ask", response_model=AskResponse)
-def ask(request: AskRequest, db: Session = Depends(get_db)):
+def ask(
+    request: AskRequest,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id),
+):
     """
     Ask a question — with safety filtering, Langfuse tracing, and LLM evaluation.
     """
@@ -123,7 +139,7 @@ def ask(request: AskRequest, db: Session = Depends(get_db)):
     trace_id = None
 
     # Step 3 — retrieve relevant chunks
-    chunks = retrieve_relevant_chunks(db, sanitized_question)
+    chunks = retrieve_relevant_chunks(db, sanitized_question, user_id)
     if not chunks:
         return AskResponse(
             answer="No documents uploaded yet. Please upload a document first.",
@@ -141,7 +157,7 @@ def ask(request: AskRequest, db: Session = Depends(get_db)):
         question=sanitized_question,
         context=context,
         answer=answer,
-        user_id=request.user_id,
+        user_id=user_id,
         model=settings.groq_model,
     )
 

@@ -12,10 +12,7 @@ class Settings(BaseSettings):
     groq_model: str = Field(default="groq/compound", alias="GROQ_MODEL")
 
     # Database
-    database_url: str = Field(
-        default="postgresql://admin:admin123@localhost:5432/docsqa",
-        alias="DATABASE_URL",
-    )
+    database_url: str = Field(..., alias="DATABASE_URL")
 
     # Embeddings
     embedding_model: str = Field(default="all-MiniLM-L6-v2", alias="EMBEDDING_MODEL")
@@ -34,6 +31,13 @@ class Settings(BaseSettings):
     
     
 
+    # Auth (Clerk)
+    clerk_jwks_url: str = Field(..., alias="CLERK_JWKS_URL")
+    clerk_issuer: str = Field(..., alias="CLERK_ISSUER")
+
+    # CORS: comma-separated list of allowed frontend origins
+    allowed_origins: str = Field(..., alias="ALLOWED_ORIGINS")
+
     # Sentry
     sentry_dsn: str = Field(default="", alias="SENTRY_DSN")
 
@@ -42,13 +46,6 @@ class Settings(BaseSettings):
     model_config = {"env_file": ".env", "populate_by_name": True}
 
 
-try:
-    settings = Settings()
-except Exception:
-    settings = Settings(
-        GROQ_API_KEY="sk-fake-key-for-tests",
-        DATABASE_URL="postgresql://admin:admin123@localhost:5432/docsqa_test",
-        LANGFUSE_PUBLIC_KEY="pk-fake",
-        LANGFUSE_SECRET_KEY="sk-fake",
-        SENTRY_DSN="",
-    )
+# Fails loudly at import time if any required setting is missing.
+# Tests must set the required env vars explicitly (see tests/conftest.py).
+settings = Settings()

@@ -20,7 +20,7 @@ clearly — do not make up information.
 Always cite which part of the context supports your answer where possible."""
 
 
-def retrieve_relevant_chunks(db: Session, question: str, top_k: int = None) -> list[Chunk]:
+def retrieve_relevant_chunks(db: Session, question: str, user_id: str, top_k: int = None) -> list[Chunk]:
     """
     Embed the question and find the top_k most similar chunks in the database
     using cosine distance — smaller distance means more similar.
@@ -30,6 +30,7 @@ def retrieve_relevant_chunks(db: Session, question: str, top_k: int = None) -> l
 
     stmt = (
         select(Chunk)
+        .where(Chunk.user_id == user_id)
         .order_by(Chunk.embedding.cosine_distance(question_vector))
         .limit(top_k)
     )
@@ -70,9 +71,9 @@ Answer the question using only the context above."""
     return response.choices[0].message.content
 
 
-def ask_question(db: Session, question: str) -> dict:
+def ask_question(db: Session, question: str, user_id: str) -> dict:
     """Full RAG pipeline: retrieve relevant chunks, build context, generate answer."""
-    chunks = retrieve_relevant_chunks(db, question)
+    chunks = retrieve_relevant_chunks(db, question, user_id)
 
     if not chunks:
         return {
