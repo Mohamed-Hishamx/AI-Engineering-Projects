@@ -1,6 +1,6 @@
 # LLM Multi-Agent Workflow Automation
 
-A small multi-agent system built with **Python, LangChain, and LangGraph** that
+A small demo of a multi-agent system built with **Python, LangChain, and LangGraph** that
 automates lead qualification, customer support triage, and dynamic workflow
 execution.
 
@@ -52,3 +52,7 @@ python main.py "We're an enterprise team of 40, need pricing this week"
 ```bash
 python tests/test_workflow.py
 ```
+
+## Status and limits
+
+Demo. By default the "agents" are rule-based mocks, so the routing and decision logic is demonstrated but no model quality is. No external tools or side effects are connected. Tests cover the happy path routing only.

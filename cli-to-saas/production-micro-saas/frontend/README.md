@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Docs Q&A Frontend
 
-## Getting Started
+Next.js app (App Router) with Clerk sign-in. After signing in, a user can upload a PDF or Markdown file and ask questions about their own documents. It talks to the backend in `../../docs-qa-backend`.
 
-First, run the development server:
+The frontend sends the Clerk session token as a Bearer token on every request. The backend verifies it. A signed-in page alone does not protect data, the backend checks do.
+
+## Setup
 
 ```bash
+npm install
+# create .env.local with the variables below
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Notes |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | Backend URL. Defaults to `http://localhost:8000` |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | From your Clerk dashboard |
+| `CLERK_SECRET_KEY` | From your Clerk dashboard |
 
-## Learn More
+## Backend requirements
 
-To learn more about Next.js, take a look at the following resources:
+The backend must have `ALLOWED_ORIGINS` set to this app's origin (for example `http://localhost:3000`), and `CLERK_JWKS_URL` and `CLERK_ISSUER` set to the same Clerk application. Otherwise requests are blocked by CORS or rejected with 401.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Files
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/page.tsx`, `app/layout.tsx`: landing page and Clerk provider
+- `app/components/Dashboard.tsx`: upload and ask UI, adds the token to requests
+- `proxy.ts`: Clerk middleware
