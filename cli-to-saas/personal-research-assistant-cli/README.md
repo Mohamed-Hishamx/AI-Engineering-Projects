@@ -9,7 +9,7 @@ A command-line research assistant powered by Groq (Llama 3.3 70B). Ask any quest
 | Structured LLM output | Groq JSON mode + Pydantic schema validation |
 | Config management | `pydantic-settings` loading from `.env` |
 | Logging | Rotating file handler + console handler via `logging.config` |
-| Testing | `pytest` with mocked Groq calls — no real API key needed |
+| Testing | `pytest` with mocked Groq calls (no real API calls) |
 | Dev hygiene | `.env.example`, `.gitignore`, `requirements.txt` |
 
 ## Example output
@@ -53,10 +53,8 @@ personal-research-assistant-cli/
 │   ├── test_assistant.py   # Unit tests with mocked Groq client
 │   └── test_display.py     # Output formatting tests
 ├── logs/              # Auto-created; rotating log files land here
-├── .env.example       # Template — copy to .env and add your key
+├── .env.example       # Template, copy to .env and add your key
 ├── .gitignore
-├── conftest.py
-├── pytest.ini
 └── requirements.txt
 ```
 
@@ -84,21 +82,21 @@ python -m src.main
 
 ## Running tests
 
-Tests are fully mocked — no API key required:
+The Groq client is mocked in the tests, so no real API calls are made. Settings require `GROQ_API_KEY` to exist, so set any dummy value first:
 
 ```bash
-pytest
+GROQ_API_KEY=dummy pytest
 ```
 
 ## Key learning points
 
-**Why JSON mode?** Passing `response_format={"type": "json_object"}` to Groq guarantees the response is valid JSON. Combined with Pydantic's `model_validate_json()`, you get a runtime guarantee that the response matches your schema — or an explicit error if it doesn't.
+**Why JSON mode?** Passing `response_format={"type": "json_object"}` to Groq asks for a JSON response. Combined with Pydantic's `model_validate_json()`, you get a runtime guarantee that the response matches your schema — or an explicit error if it doesn't.
 
 **Why pydantic-settings?** It reads from `.env` automatically and raises a clear error at startup if a required variable (like `GROQ_API_KEY`) is missing — not buried in a runtime exception later.
 
 **Why mock the Groq client in tests?** Real API calls in tests are slow, cost money, and fail when the network is down. `unittest.mock.patch` replaces the `Groq` class with a fake that returns whatever you define — so you test *your* logic, not Groq's infrastructure.
 
-**Why Groq instead of OpenAI?** Groq runs LLMs on custom LPU hardware making it the fastest inference available, and it's free on the dev tier. The API is identical in shape to OpenAI's — switching providers is just two lines of code. That's the point: the interface matters more than the provider.
+**Why Groq instead of OpenAI?** Groq runs LLMs on custom LPU hardware making it the fastest inference available, and it has a free dev tier (check current terms). The API is identical in shape to OpenAI's — switching providers is just two lines of code. That's the point: the interface matters more than the provider.
 
 ## Next step → Project 2: Docs Q&A Backend
 

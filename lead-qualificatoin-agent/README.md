@@ -14,7 +14,7 @@ An AI agent that automatically researches and scores sales leads 1-10 using web 
 - **FastAPI** — webhook endpoint
 - **LangChain** — agent orchestration
 - **Tavily** — web search for agents
-- **Groq** — free, fast LLM (Llama 3.3)
+- **Groq**: hosted Llama 3.3 model (has a free tier, check current terms)
 
 ## Setup
 
@@ -51,3 +51,7 @@ curl -X POST http://localhost:8000/qualify \
 | 1-3 | Poor fit |
 | 4-6 | Medium fit |
 | 7-10 | Strong fit |
+
+## Status and limits
+
+Prototype. The score and reasoning come back as free text from the model, not a validated schema. There is no authentication, no input length limit, no tests, and no evaluation of whether scores match real lead quality. Lead data is printed to the console. Do not expose this endpoint publicly with real lead data.
